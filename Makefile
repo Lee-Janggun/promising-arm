@@ -10,7 +10,7 @@ build: Makefile.coq
 	$(MAKE) -f Makefile.coq all
 
 quick: Makefile.coq
-	$(MAKE) -f Makefile.coq quick
+	$(MAKE) -f Makefile.coq vio
 
 Makefile.coq: Makefile $(COQTHEORIES)
 	(echo $(foreach dir, $(COQDIRS), "-R src/$(dir) $(COQMODULE).$(dir)"); \

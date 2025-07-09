@@ -16,7 +16,7 @@ Set Implicit Arguments.
 (** Very basic lemmas *)
 (******************************************************************************)
 
-Definition appA := app_ass.
+Definition appA := app_assoc.
 Definition length_nil A : length (@nil A) = 0 := eq_refl.
 Definition length_cons A (a: A) l : length (a :: l) = S (length l) := eq_refl.
 Definition length_app := app_length.
@@ -317,7 +317,7 @@ Lemma in_filterP_iff A (x : A) f l :
   In x (filterP f l) <-> In x l /\ f x.
 Proof.
   induction l; ins; desf; ins; try (rewrite IHn; clear IHn);
-  intuition; desf; eauto.
+  intuition auto with *; desf; eauto.
 Qed.
 
 Lemma filterP_app A f (l l' : list A) :
@@ -544,22 +544,22 @@ Lemma disjoint_nil_r A (l : list A) : disjoint l nil.
 Proof. done. Qed.
 
 Lemma disjoint_one_l A (a : A) (l : list A) : disjoint (a :: nil) l <-> ~ In a l.
-Proof. unfold disjoint; intuition; ins; desf; eauto. Qed.
+Proof. unfold disjoint; intuition auto with *; ins; desf; eauto. Qed.
 
 Lemma disjoint_one_r A (a : A) (l : list A) : disjoint l (a :: nil) <-> ~ In a l.
-Proof. unfold disjoint; intuition; ins; desf; eauto. Qed.
+Proof. unfold disjoint; intuition auto with *; ins; desf; eauto. Qed.
 
 
 Lemma disjoint_rev_l A (l1 l2 : list A) :
   disjoint (rev l1) l2 <-> disjoint l1 l2.
 Proof.
-  unfold disjoint; intuition; eapply H; eauto; try rewrite <- in_rev in *; eauto.
+  unfold disjoint; intuition auto with *; eapply H; eauto; try rewrite <- in_rev in *; eauto.
 Qed.
 
 Lemma disjoint_rev_r A (l1 l2 : list A) :
   disjoint l1 (rev l2) <-> disjoint l1 l2.
 Proof.
-  unfold disjoint; intuition; eapply H; eauto; try rewrite <- in_rev in *; eauto.
+  unfold disjoint; intuition auto with *; eapply H; eauto; try rewrite <- in_rev in *; eauto.
 Qed.
 
 
@@ -637,7 +637,7 @@ Qed.
 Lemma nodup_rev A (l : list A) : NoDup (rev l) <-> NoDup l.
 Proof.
   induction l; ins.
-  rewrite nodup_app, !nodup_cons, IHl, disjoint_rev_l, disjoint_one_r; intuition.
+  rewrite nodup_app, !nodup_cons, IHl, disjoint_rev_l, disjoint_one_r; intuition auto with *.
 Qed.
 
 Lemma nodup_filter A (l: list A) (ND: NoDup l) f : NoDup (filter f l).
@@ -657,7 +657,7 @@ Global Hint Resolve nodup_filter nodup_filterP : core hahn.
 Lemma Permutation_nodup A ( l l' : list A) :
   Permutation l l' -> NoDup l -> NoDup l'.
 Proof.
-  induction 1; eauto; rewrite !nodup_cons in *; ins; desf; intuition.
+  induction 1; eauto; rewrite !nodup_cons in *; ins; desf; intuition auto with *.
   eby symmetry in H; eapply H0; eapply Permutation_in.
 Qed.
 
@@ -726,7 +726,7 @@ Qed.
 Lemma in_split_perm A (x : A) l (IN: In x l) :
   exists l', Permutation l (x :: l').
 Proof.
-  induction l; ins; intuition; desf; eauto.
+  induction l; ins; intuition auto with *; desf; eauto.
   exists (a :: l'); rewrite H0; vauto.
 Qed.
 
@@ -744,7 +744,7 @@ Qed.
 Lemma set_finiteE A (s : A -> Prop) :
   set_finite s <-> exists findom, NoDup findom /\ s ≡₁ (fun x => In x findom).
 Proof.
-  repeat autounfold with unfolderDb; intuition; desf; eauto.
+  repeat autounfold with unfolderDb; intuition auto with *; desf; eauto.
   exists (undup (filterP s findom)); splits; ins.
   all: rewrite in_undup_iff, in_filterP_iff in *; desf; eauto.
 Qed.
@@ -829,7 +829,7 @@ Section map_filter.
     In x (map_filter l) <-> exists a, f a = Some x /\ In a l.
   Proof using.
     induction l; ins; desf; ins; try (rewrite IHn; clear IHn);
-    intuition; desf; eauto.
+    intuition auto with *; desf; eauto.
   Qed.
 
   Lemma map_filter_app (l l' : list A) :
@@ -862,7 +862,7 @@ Qed.
 Lemma Forall_app A (P : A -> Prop) l1 l2 :
   Forall P (l1 ++ l2) <-> Forall P l1 /\ Forall P l2.
 Proof.
-  induction l1; ins; [by intuition; vauto|].
+  induction l1; ins; [by intuition auto with *; vauto|].
   by rewrite !Forall_cons, IHl1, and_assoc.
 Qed.
 
@@ -1017,7 +1017,7 @@ Proof.
     repeat split; ins; desf; f_equal; lia.
     destruct len; ins.
       split; ins; desf; lia.
-    specialize (IHl (S start) len); intuition; desf; intuition; auto using f_equal.
+    specialize (IHl (S start) len); intuition auto with *; desf; intuition auto with *; auto using f_equal.
     rewrite Nat.add_succ_comm in *; ins.
     rewrite Nat.add_succ_comm in *; auto using f_equal, le_S_n.
 Qed.

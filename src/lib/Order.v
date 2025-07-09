@@ -255,7 +255,7 @@ Next Obligation.
     (try by right; i; ss).
   destruct (H x x0).
   - left. f_equal. ss.
-  - right. intro Y. inv Y. intuition.
+  - right. intro Y. inv Y. intuition auto with *.
 Defined.
 
 #[export]
@@ -339,27 +339,27 @@ Program Instance prop_order:
     prop_partialorder.
 Next Obligation.
   unfold prop_le, prop_join, prop_bot in *.
-  intuition.
+  intuition auto with *.
 Qed.
 Next Obligation.
   unfold prop_le, prop_join, prop_bot in *.
-  intuition.
+  intuition auto with *.
 Qed.
 Next Obligation.
   unfold prop_le, prop_join, prop_bot in *.
-  propext. intuition.
+  propext. intuition auto with *.
 Qed.
 Next Obligation.
   unfold prop_le, prop_join, prop_bot in *.
-  propext. intuition.
+  propext. intuition auto with *.
 Qed.
 Next Obligation.
   unfold prop_le, prop_join, prop_bot in *.
-  intuition.
+  intuition auto with *.
 Qed.
 Next Obligation.
   unfold prop_le, prop_join, prop_bot in *.
-  intuition.
+  intuition auto with *.
 Qed.
 
 
@@ -380,7 +380,7 @@ Next Obligation.
   unfold bool_le in *.
   econs.
   - i. inv H. econs; ss.
-  - i. inv H. destruct x, x0; intuition.
+  - i. inv H. destruct x, x0; intuition auto with *.
 Qed.
 
 #[export]
@@ -396,23 +396,23 @@ Program Instance bool_order:
     bool_partialorder.
 Next Obligation.
   unfold bool_le, bool_join, bool_bot in *.
-  destruct a, b; intuition.
+  destruct a, b; intuition auto with *.
 Qed.
 Next Obligation.
   unfold bool_le, bool_join, bool_bot in *.
-  destruct a, b; intuition.
+  destruct a, b; intuition auto with *.
 Qed.
 Next Obligation.
   unfold bool_le, bool_join, bool_bot in *.
-  destruct a, b, c; intuition.
+  destruct a, b, c; intuition auto with *.
 Qed.
 Next Obligation.
   unfold bool_le, bool_join, bool_bot in *.
-  destruct a, b; intuition.
+  destruct a, b; intuition auto with *.
 Qed.
 Next Obligation.
   unfold bool_le, bool_join, bool_bot in *.
-  destruct a, b, c; intuition.
+  destruct a, b, c; intuition auto with *.
 Qed.
 
 
@@ -445,11 +445,11 @@ Program Instance unit_order:
     unit_partialorder.
 Next Obligation.
   unfold unit_le, unit_join, unit_bot in *.
-  destruct a, b; intuition.
+  destruct a, b; intuition auto with *.
 Qed.
 Next Obligation.
   unfold unit_le, unit_join, unit_bot in *.
-  destruct a, b; intuition.
+  destruct a, b; intuition auto with *.
 Qed.
 Next Obligation.
   unfold unit_le, unit_join, unit_bot in *.

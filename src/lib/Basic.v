@@ -214,9 +214,9 @@ Proof.
   induction l; ss.
   { econs; i; des; ss. }
   destruct (f a) eqn:FA; ss.
-  - rewrite IHl. intuition; des; subst; eauto.
+  - rewrite IHl. intuition auto with *; des; subst; eauto.
     rewrite FA in H2. inv H2. auto.
-  - rewrite IHl. intuition; des; subst; eauto. congr.
+  - rewrite IHl. intuition auto with *; des; subst; eauto. congr.
 Qed.
 
 Lemma filter_map_app A B (f: A -> option B) (l1 l2: list A):
@@ -814,11 +814,11 @@ Module IdSet.
     else mem x' s.
   Proof.
     destruct (equiv_dec x' x).
-    - inv e. apply mem_1. apply add_spec. intuition.
+    - inv e. apply mem_1. apply add_spec. intuition auto with *.
     - destruct (mem x' s) eqn:MEM.
-      + apply mem_1. apply add_spec. intuition.
+      + apply mem_1. apply add_spec. intuition auto with *.
       + destruct (mem x' (add x s)) eqn:MEM'; ss.
-        apply mem_1 in MEM'. apply add_spec in MEM'. des; intuition.
+        apply mem_1 in MEM'. apply add_spec in MEM'. des; intuition auto with *.
         apply mem_1 in MEM'. eauto.
   Qed.
 
@@ -832,7 +832,7 @@ Module IdSet.
     - inv e. destruct (mem x (remove x s)) eqn:MEM; ss.
       apply remove_spec in MEM. des; ss.
     - destruct (mem x' s) eqn:MEM.
-      + apply mem_1. apply remove_spec. intuition.
+      + apply mem_1. apply remove_spec. intuition auto with *.
       + destruct (mem x' (remove x s)) eqn:MEM'; ss.
         apply mem_1 in MEM'. apply remove_spec in MEM'. des.
         apply mem_1 in MEM'0. eauto.

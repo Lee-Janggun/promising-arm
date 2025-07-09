@@ -34,15 +34,15 @@ Module Msg.
     destruct x, y.
 
     destruct (loc0 == loc1); cycle 1.
-    { right. intro X. inv X. intuition. }
+    { right. intro X. inv X. intuition auto with *. }
 
     destruct (val0 == val1); cycle 1.
-    { right. intro X. inv X. intuition. }
+    { right. intro X. inv X. intuition auto with *. }
 
     destruct (tid0 == tid1); cycle 1.
-    { right. intro X. inv X. intuition. }
+    { right. intro X. inv X. intuition auto with *. }
 
-    left. f_equal; intuition.
+    left. f_equal; intuition auto with *.
   Defined.
 End Msg.
 
@@ -72,7 +72,7 @@ Module Memory.
 
   Definition append (msg:Msg.t) (mem:t): Time.t * t :=
     (S (length mem), mem ++ [msg]).
-  
+
   Definition no_msgs (from to:nat) (pred:Msg.t -> Prop) (mem:t): Prop :=
     forall ts msg
       (TS1: from < S ts)
@@ -201,7 +201,7 @@ Module Memory.
   Proof.
     destruct ts3; ss.
     destruct (le_lt_dec (S ts3) ts2); ss.
-    exfalso. eapply LATEST; eauto. 
+    exfalso. eapply LATEST; eauto.
   Qed.
 
   Lemma ge_latest loc ts1 ts2 mem
@@ -296,7 +296,7 @@ Module Memory.
       + i. subst. lia.
       + i. eapply IHto; eauto.
         destruct (le_lt_dec (S ts) to); auto.
-        apply lt_le_S in l. assert(ts = to) as teq by lia. subst. 
+        apply lt_le_S in l. assert(ts = to) as teq by lia. subst.
         destruct msg. ss. rewrite NTH in MSG. inv MSG.
         contradiction.
     - eapply IHto; eauto.
@@ -458,7 +458,7 @@ Section View.
     ii. econs.
     - i. subst. econs; refl.
     - i. destruct x, x0. inv H1. inv H2. inv H3. ss. f_equal.
-      + intuition.
+      + intuition auto with *.
       + antisym; ss.
   Qed.
 
@@ -688,7 +688,7 @@ Module Promises.
       try rewrite fun_add_spec in *.
     - inv e. rewrite X in X'. inv X'. condtac; ss. congr.
     - condtac; ss. inversion e. subst.
-      rewrite <- X' in X. apply id_of_time_inj in X. inv X. intuition.
+      rewrite <- X' in X. apply id_of_time_inj in X. inv X. intuition auto with *.
   Qed.
 
   Definition unset (ts:Time.t) (promises:t): t :=
@@ -707,9 +707,9 @@ Module Promises.
     destruct (id_of_time ts') eqn:X', (id_of_time ts) eqn:X, (equiv_dec ts' ts); ss;
       destruct ts, ts'; ss;
       try rewrite fun_add_spec in *.
-    - inv e. rewrite X in X'. inv X'. condtac; intuition.
+    - inv e. rewrite X in X'. inv X'. condtac; intuition auto with *.
     - condtac; ss. inversion e. subst.
-      rewrite <- X' in X. apply id_of_time_inj in X. inv X. intuition.
+      rewrite <- X' in X. apply id_of_time_inj in X. inv X. intuition auto with *.
   Qed.
 
   Definition clear_below (ts:Time.t) (promises:t): t :=
@@ -1202,7 +1202,7 @@ Section Local.
     (* TODO: fulfill should update COH's taint, too. *)
     inv WRITABLE. unfold Order.le. clear -COH. lia.
   Qed.
-  
+
   Lemma write_failure_incr
         ex res lc1 lc2
         (LC: write_failure ex res lc1 lc2):
@@ -1427,7 +1427,7 @@ Section ExecUnit.
         * i. revert IN. rewrite Promises.unset_o. condtac; ss. eauto.
         * i. rewrite Promises.unset_o. rewrite fun_add_spec in TS2. condtac.
           { inversion e. subst. rewrite MSG in MSG0. destruct msg. inv MSG0. ss.
-            revert TS2. condtac; ss; intuition.
+            revert TS2. condtac; ss; intuition auto with *.
           }
           { eapply PROMISES0; eauto. revert TS2. condtac; ss. i.
             inversion e. rewrite H2. rewrite COH0. ss.
@@ -1987,7 +1987,7 @@ Module Machine.
       rewrite promises_from_mem_nil. ss.
     }
     exploit IHpromises; eauto.
-    { i. apply MEM. apply List.in_app_iff. intuition. }
+    { i. apply MEM. apply List.in_app_iff. intuition auto with *. }
     i. des. subst. destruct x.
     hexploit MEM.
     { apply List.in_app_iff. right. left. eauto. }

@@ -292,7 +292,7 @@ Qed.
 Lemma acyclic_antisymmetric :
   acyclic r -> antisymmetric r.
 Proof.
-  clear; autounfold with unfolderDb; intuition.
+  clear; autounfold with unfolderDb; intuition auto with *.
   exfalso; eauto using clos_trans.
 Qed.
 

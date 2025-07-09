@@ -163,7 +163,7 @@ Lemma app_cons_eq_snoc A (l1 l2 : list A) a a' l :
 Proof.
   split; ins; desf; [|by rewrite <- app_assoc].
   rewrite app_eq_snoc in H; ins; desf.
-  symmetry in H; rewrite app_cons_eq_cons in H; desf; eauto using app_nil_end.
+  symmetry in H; rewrite app_cons_eq_cons in H; desf; eauto using app_nil_r.
 Qed.
 
 Lemma snoc_eq_nil A (l : list A) a :
@@ -237,7 +237,7 @@ Lemma map_eq_app A B (f : A -> B) l l1' l2' :
   exists l1 l2, l = l1 ++ l2 /\ map f l1 = l1' /\ map f l2 = l2'.
 Proof.
   split; ins; desf; auto using map_app.
-  revert dependent l1'; induction l; destruct l1'; ins; desf.
+  generalize dependent l1'; induction l; destruct l1'; ins; desf.
   - exists nil, nil; ins.
   - eexists nil, (_ :: _); ins.
   - apply IHl in H; desf; eexists (_ :: _), _; ins.
@@ -414,7 +414,7 @@ Proof.
   split; ins.
   eexists (_ ++ _), _; rewrite appA, filterP_app; splits; ins.
   apply filterP_eq_nil in H2; rewrite H2.
-  apply app_nil_end.
+  by rewrite app_nil_r.
 Qed.
 
 Lemma length_filterP A f (l : list A) :
@@ -443,7 +443,7 @@ Qed.
 Lemma flatten_app A (l l' : list (list A)) :
   flatten (l ++ l') = flatten l ++ flatten l'.
 Proof.
-  by induction l; ins; desf; ins; rewrite appA, IHl.
+  by induction l; ins; desf; ins; rewrite <-appA, IHl.
 Qed.
 
 Lemma length_flatten A (l : list (list A)) :
@@ -486,14 +486,14 @@ Lemma rev_filter A f (l : list A) :
   rev (filter f l) = filter f (rev l).
 Proof.
   induction l; ins; desf; ins; rewrite filter_app, IHl; ins; desf; ins.
-  auto using app_nil_end.
+  auto using app_nil_r.
 Qed.
 
 Lemma rev_filterP A f (l : list A) :
   rev (filterP f l) = filterP f (rev l).
 Proof.
   induction l; ins; desf; ins; rewrite filterP_app, IHl; ins; desf; ins.
-  auto using app_nil_end.
+  auto using app_nil_r.
 Qed.
 
 Lemma rev_map A B (f : A -> B) (l : list A) :
@@ -1202,7 +1202,7 @@ Proof.
          eauto using in_cons.
       by specialize (H0 x); rewrite in_app_iff in *; ins; desf;
          destruct (classic (a = x)); subst; try tauto; exfalso; eauto using in_eq.
-    eexists; rewrite app_ass in *; ins.
+    eexists; rewrite <-app_assoc in *; ins.
     by eapply Permutation_trans, Permutation_middle; eauto.
 
   destruct (IHl l'); eauto; ins.

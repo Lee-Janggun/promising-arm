@@ -1416,7 +1416,7 @@ Proof.
       + eapply eu_wf_interference; ss.
       + eapply interference_certify; ss.
   }
-  { i. revert FIND2. rewrite <- TPOOL, IdMap.add_spec. condtac; ss. 
+  { i. revert FIND2. rewrite <- TPOOL, IdMap.add_spec. condtac; ss.
     - i. inv FIND2. ss.
     - i. exploit OUT; eauto.
       destruct (equiv_dec tid0 tid); [congr|]. ss.
